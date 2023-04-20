@@ -15,11 +15,15 @@ def create_pdf(cotizaciones):
 
     doc = SimpleDocTemplate("cotizacion.pdf", 
                             pagesize=letter,
-                            leftMargin=20 * mm,  # Margen izquierdo de 20 mm
-                            rightMargin=20 * mm,  # Margen derecho de 20 mm
+                            leftMargin=10 * mm,  # Margen izquierdo de 20 mm
+                            rightMargin=10 * mm,  # Margen derecho de 20 mm
                             topMargin=10 * mm,  # Margen superior de 20 mm
                             bottomMargin=20 * mm,  # Margen inferior de 20 mm
                             )
+    
+    logo_path = "./static/img/logo_bimbo.png"
+    logo = Image(logo_path, width=70, height=50)  # Ajusta width y height según las dimensiones deseadas
+
     styles = getSampleStyleSheet()
     header_style = styles['Heading1']
     header_style.alignment = 1 # Center
@@ -28,14 +32,29 @@ def create_pdf(cotizaciones):
     minimal_leading_style = ParagraphStyle(
         name="MinimalLeading",
         fontSize=10,
-        leading=1,  # Este valor define el espacio entre líneas, ajústalo según tus necesidades
+        leading=11,  # Este valor define el espacio entre líneas, ajústalo según tus necesidades
         alignment=1,  # Alineación centrada
     )
+
+
 
     nombre_empresa = Paragraph(nombre_empresa, style=minimal_leading_style)
     rfc_empresa = Paragraph(rfc_empresa, style=minimal_leading_style)
     direccion_empresa = Paragraph(direccion_empresa, style=minimal_leading_style)
     telefono_empresa = Paragraph(telefono_empresa, style=minimal_leading_style)
+
+        # Crea una tabla para organizar el logo y los datos de la empresa
+    company_info_table = Table([
+    [logo, '', [[nombre_empresa], [rfc_empresa], [direccion_empresa], [telefono_empresa]], '', logo]
+    ], colWidths=[90, 10, 350, 10, 90])  # Ajusta el tamaño de las columnas de espacio si es necesario
+
+    # Establece el estilo de la tabla
+    company_info_table.setStyle(TableStyle([
+    ('VALIGN', (0, 0), (-1, -1), 'TOP'),  # Alineación vertical en la parte superior
+    ('VALIGN', (1, 0), (1, 0), 'TOP'),  # Alineación vertical en la parte superior de la tabla anidada
+        ]))
+
+
     id_cliente = cotizaciones[0]['id_cliente']
     nombre_cliente = cotizaciones[0]['nombre_cliente']
     fecha = cotizaciones[0]['fecha']
@@ -45,6 +64,8 @@ def create_pdf(cotizaciones):
     subtotal = cotizaciones[0]['subtotal']
     iva = cotizaciones[0]['iva']
     total = cotizaciones[0]['total']
+
+    
 
     data_header = [
         ["Cliente:", nombre_cliente, "Presupuesto #:",
@@ -116,15 +137,8 @@ def create_pdf(cotizaciones):
     spacer = Spacer(0, 20)
 
     flowables = [
-        nombre_empresa,
-        Spacer(1, 10),
-        rfc_empresa,
-        Spacer(1, 10),
-        direccion_empresa,
-        Spacer(1, 10),
-        telefono_empresa,
-        Spacer(1, 20),
-    ]
+        company_info_table,
+        spacer]
     flowables.append(header_table)
     flowables.append(spacer)
     flowables.append(KeepTogether(table))
@@ -135,14 +149,14 @@ def create_pdf(cotizaciones):
     table_totals_width, table_totals_height = table_totals.wrap(doc.width, doc.height)
 
     # Calcular espacio disponible en la página actual
-    remaining_space = doc.height - (header_table_height + spacer.height + table_height) - 30  # 20 es el padding
+    remaining_space = doc.height - (header_table_height + spacer.height + table_height) - 55
     # Verificar si hay espacio suficiente para la tabla de totales
     # if remaining_space < table_totals_height + 20:
     #     flowables.append(PageBreak())
     #     remaining_space = doc.height
 
     # Calcular la altura del spacer para mover la tabla de totales a la parte inferior de la página
-    spacer_height = remaining_space - table_totals_height - 40  # 20 es el padding
+    spacer_height = remaining_space - table_totals_height - 50 
     totals_spacer = Spacer(-1, spacer_height) 
 
     flowables.append(totals_spacer)
