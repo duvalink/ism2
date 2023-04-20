@@ -66,7 +66,7 @@ def create_pdf(cotizaciones):
             descripcion = Paragraph(
                 cotizacion['descripcion'], styles['Normal'])
             data.append([cotizacion['partida'], descripcion, cotizacion['cantidad'],
-                        cotizacion['precio'], cotizacion['importe']])
+                        "$ {:,.2f}".format(cotizacion["precio"]), "$ {:,.2f}".format(cotizacion["importe"])])
 
     table = Table(data, colWidths=[50, 200, 100, 80, 60])
 
@@ -87,8 +87,19 @@ def create_pdf(cotizaciones):
         ('GRID', (0, 0), (-1, -1), 1, colors.black),
     ]))
 
-    data_totals = [["Materiales", "Mano de Obra", "Subtotal", "IVA", "Total"],
-                   [materiales, mano_obra, subtotal, iva, total]]
+    # data_totals = [["Materiales", "Mano de Obra", "Subtotal", "IVA", "Total"],
+    #                [materiales, mano_obra, subtotal, iva, total]]
+    data_totals = [
+                ["Materiales", "Mano de Obra", "Subtotal", "IVA", "Total"],
+                [
+                    "$ {:,.2f}".format(materiales),
+                    "$ {:,.2f}".format(mano_obra),
+                    "$ {:,.2f}".format(subtotal),
+                    "$ {:,.2f}".format(iva),
+                    "$ {:,.2f}".format(total),
+                ],
+            ]
+
     table_totals = Table(data_totals)
 
     table_totals.setStyle(TableStyle([
@@ -124,15 +135,15 @@ def create_pdf(cotizaciones):
     table_totals_width, table_totals_height = table_totals.wrap(doc.width, doc.height)
 
     # Calcular espacio disponible en la página actual
-    remaining_space = doc.height - (header_table_height + spacer.height + table_height)
+    remaining_space = doc.height - (header_table_height + spacer.height + table_height) - 30  # 20 es el padding
     # Verificar si hay espacio suficiente para la tabla de totales
-    if remaining_space < table_totals_height + 20:
-        flowables.append(PageBreak())
-        remaining_space = doc.height
+    # if remaining_space < table_totals_height + 20:
+    #     flowables.append(PageBreak())
+    #     remaining_space = doc.height
 
     # Calcular la altura del spacer para mover la tabla de totales a la parte inferior de la página
-    spacer_height = remaining_space - table_totals_height - 20
-    totals_spacer = Spacer(1, spacer_height)
+    spacer_height = remaining_space - table_totals_height - 40  # 20 es el padding
+    totals_spacer = Spacer(-1, spacer_height) 
 
     flowables.append(totals_spacer)
     flowables.append(table_totals)
