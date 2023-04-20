@@ -1,0 +1,38 @@
+
+
+{% if editar %}
+<h2>Editar Cliente</h2>
+<form action="{{ url_for('clientes.actualizar') }}" method="POST">
+    <input type="hidden" name="id" value="{{ datos[0] }}">
+    <label for="nombre">Nombre:</label>
+    <input type="text" name="nombre" id="nombre" value="{{ datos[1] }}"><br>
+    <label for="direccion">Direccion:</label>
+    <input type="text" name="direccion" id="direccion" value="{{ datos[2] }}"><br>
+    <label for="cp">CP:</label>
+    <input type="text" name="cp" id="cp" value="{{ datos[3] }}"><br>
+    <label for="ciudad">Ciudad:</label>
+    <input type="text" name="ciudad" id="ciudad" value="{{ datos[4] }}"><br>
+    <label for="telefono">Telefono:</label>
+    <input type="text" name="telefono" id="telefono" value="{{ datos[5] }}"><br>
+    <label for="rfc">R.F.C.:</label>
+    <input type="text" name="rfc" id="rfc" value="{{ datos[6] }}"><br>
+    <input type="submit" value="Actualizar">
+</form>
+{% else %}
+<h2>Registrar Cliente</h2>
+<form action="{{ url_for('clientes.formulario') }}" method="POST">
+    <label for="nombre">Nombre:</label>
+    <input type="text" name="nombre" id="nombre"><br>
+    <label for="direccion">Direccion:</label>
+    <input type="text" name="direccion" id="direccion"><br>
+    <label for="cp">CP:</label>
+    <input type="text" name="cp" id="cp"><br>
+    <label for="ciudad">Ciudad:</label>
+    <input type="text" name="ciudad" id="ciudad"><br>
+    <label for="telefono">Telefono:</label>
+    <input type="text" name="telefono" id="telefono"><br>
+    <label for="rfc">R.F.C.:</label>
+    <input type="text" name="rfc" id="rfc"><br>
+    <input type="submit" value="Registrar">
+</form>
+{% endif %}

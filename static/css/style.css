@@ -1,0 +1,48 @@
+/* Hacer los checkbox más grandes */
+.mi-tabla input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  font-size: 16px;
+}
+
+#contactos-list {
+  list-style: none;
+  font-size: 20px;
+  column-count: 6; /* 5 columnas */
+  column-gap: 3em; 
+}
+
+#contactos-list label {
+  margin-left: 3px;
+}
+
+.selected {
+  color: red;
+  font-weight: bold;
+}
+
+.fecha-cot{
+  font-size: 20px;
+  color: red;
+}
+
+/* bordes en la toda la tabla, incluida tr y td */
+.mat-mano {
+  border: 1px solid black;
+  border-collapse: collapse;
+  font-size: 2em;
+  background-color: #212529;
+  color: #f1f1f2;
+}
+
+.mat-mano tr, .mat-mano td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 5px;
+  text-align: right;
+}
+
+.select_cliente {
+  margin-top: 10px;
+  font-size: 1.5em;
+}

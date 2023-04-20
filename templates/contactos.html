@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Contactos</h1>
+{% include 'formulario_contactos.html' %}
+
+<h2>Lista de contactos</h2>
+
+<table class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Contacto</th>
+      <th>Correo electrónico</th>
+      <th>Cliente</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for contacto in contactos %}
+    <tr>
+      <td>{{ contacto[0] }}</td>
+      <td>{{ contacto[1] }}</td>
+      <td>{{ contacto[2] }}</td>
+      <td>{{ contacto[3] }}</td>
+      <td><button class="btn btn-primary">Editar</button><button class="btn btn-danger">Eliminar</button></td>
+    </tr>
+    {% endfor %}  </tbody>
+</table>
+
+
+
+{% endblock %}

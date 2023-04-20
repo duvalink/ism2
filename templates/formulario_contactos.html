@@ -1,0 +1,25 @@
+<form action="" method="post">
+    <div class="row g-2">
+        <div class="col-3">
+            <input type="text" name="contacto" id="contacto" class="form-control" placeholder="Contacto"
+                aria-label="contacto">
+        </div>
+        <div class="col-3">
+            <input type="text" name="correo" id="correo" class="form-control" placeholder="Correo Electronico"
+                aria-label="Correo Electronico">
+        </div>
+        <div class="col-2">
+            <select name="cliente_id" id="cliente_id" class="form-select{% if clientes|length > 3 %}-lg{% endif %}">
+                <option value="">Selecciona la empresa del contacto</option>
+                {% for cliente in clientes %}
+                <option value="{{ cliente[0] }}">{{ cliente[1] }}</option>
+                {% endfor %}
+            </select>
+            
+        </div>
+        <div>
+            <input type="submit" class="btn btn-primary" value="Registrar Contacto">
+        </div>
+
+    </div>
+</form>
