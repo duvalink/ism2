@@ -171,7 +171,7 @@ def obtener_cotizaciones_por_id(id_presupuesto):
     cursor = mysql.connection.cursor()
 
     query = """
-    SELECT c.id_cliente, c.nombre, p.id_presupuesto, p.fecha, p.materiales, p.mano_obra, p.subtotal, p.iva, p.total,
+    SELECT c.id_cliente, c.nombre, c.direccion, p.id_presupuesto, p.fecha, p.materiales, p.mano_obra, p.subtotal, p.iva, p.total,
            pp.id_partida, pp.partida, pp.descripcion, pp.cantidad, pp.precio, pp.importe
     FROM presupuestos p
     JOIN clientes c ON p.cliente_id = c.id_cliente
@@ -187,19 +187,20 @@ def obtener_cotizaciones_por_id(id_presupuesto):
         cotizacion_dict = {
             'id_cliente': cotizacion[0],
             'nombre_cliente': cotizacion[1],
-            'id_presupuesto': cotizacion[2],
-            'fecha': cotizacion[3],
-            'materiales': cotizacion[4],
-            'mano_obra': cotizacion[5],
-            'subtotal': cotizacion[6],
-            'iva': cotizacion[7],
-            'total': cotizacion[8],
-            'id_partida': cotizacion[9],
-            'partida': cotizacion[10],
-            'descripcion': cotizacion[11],
-            'cantidad': cotizacion[12],
-            'precio': cotizacion[13],
-            'importe': cotizacion[14]
+            'direccion_cliente': cotizacion[2],
+            'id_presupuesto': cotizacion[3],
+            'fecha': cotizacion[4],
+            'materiales': cotizacion[5],
+            'mano_obra': cotizacion[6],
+            'subtotal': cotizacion[7],
+            'iva': cotizacion[8],
+            'total': cotizacion[9],
+            'id_partida': cotizacion[10],
+            'partida': cotizacion[11],
+            'descripcion': cotizacion[12],
+            'cantidad': cotizacion[13],
+            'precio': cotizacion[14],
+            'importe': cotizacion[15]
         }
         cotizaciones.append(cotizacion_dict)
 

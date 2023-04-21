@@ -57,6 +57,7 @@ def create_pdf(cotizaciones):
 
     id_cliente = cotizaciones[0]['id_cliente']
     nombre_cliente = cotizaciones[0]['nombre_cliente']
+    direccion_cliente = cotizaciones[0]['direccion_cliente']
     fecha = cotizaciones[0]['fecha']
     id_presupuesto = cotizaciones[0]['id_presupuesto']
     materiales = cotizaciones[0]['materiales']
@@ -65,23 +66,21 @@ def create_pdf(cotizaciones):
     iva = cotizaciones[0]['iva']
     total = cotizaciones[0]['total'] 
 
-    
 
     data_header = [
         ["Cliente:", nombre_cliente,"", "Presupuesto #:",
         ],
         ["Fecha:", fecha.strftime('%d-%m-%Y'), "", str(id_presupuesto)],
+        ["Direccion:", direccion_cliente, "", ""],
     ]
     header_table = Table(data_header, colWidths=[60, 280,130, 100]) # Ajusta el tamaño de las columnas de espacio si es necesario
 
     header_table.setStyle(TableStyle([
         ('ALIGN', (0, 0), (-1, -1), 'LEFT'), # Alineación a la izquierda
         ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'), # Fuente negrita
-        ('FONTSIZE', (0, 0), (-1, -1), 12), # Tamaño de fuente
+        ('FONTSIZE', (0, 0), (-1, -1), 10), # Tamaño de fuente
         # ('GRID', (0, 0), (-1, -1), 1, colors.black),
         # ('ALIGN', (0, 0), (-1, -1), 'LEFT'), # Alineación a la izquierda
-
-
     ]))
 
     data = [["Part", "Descripcion", "Cant", "Precio", "Importe"]] # Encabezados de la tabla
