@@ -68,16 +68,20 @@ def create_pdf(cotizaciones):
     
 
     data_header = [
-        ["Cliente:", nombre_cliente, "Presupuesto #:",
-         str(id_presupuesto)],
-        ["Fecha:", fecha.strftime('%d-%m-%Y'), "", ""],
+        ["Cliente:", nombre_cliente,"", "Presupuesto #:",
+        ],
+        ["Fecha:", fecha.strftime('%d-%m-%Y'), "", str(id_presupuesto)],
     ]
-    header_table = Table(data_header, colWidths=[100, 150, 200, 50]) # Ajusta el tamaño de las columnas de espacio si es necesario
+    header_table = Table(data_header, colWidths=[60, 280,130, 100]) # Ajusta el tamaño de las columnas de espacio si es necesario
 
     header_table.setStyle(TableStyle([
         ('ALIGN', (0, 0), (-1, -1), 'LEFT'), # Alineación a la izquierda
         ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'), # Fuente negrita
-        ('FONTSIZE', (0, 0), (-1, -1), 10), # Tamaño de fuente
+        ('FONTSIZE', (0, 0), (-1, -1), 12), # Tamaño de fuente
+        # ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        # ('ALIGN', (0, 0), (-1, -1), 'LEFT'), # Alineación a la izquierda
+
+
     ]))
 
     data = [["Part", "Descripcion", "Cant", "Precio", "Importe"]] # Encabezados de la tabla
@@ -109,15 +113,11 @@ def create_pdf(cotizaciones):
     ]))
 
     data_totals = [
-                ["Materiales", "Mano de Obra", "Subtotal", "IVA", "Total"],
-                [
-                    "$ {:,.2f}".format(materiales),
-                    "$ {:,.2f}".format(mano_obra),
-                    "$ {:,.2f}".format(subtotal),
-                    "$ {:,.2f}".format(iva),
-                    "$ {:,.2f}".format(total),
-                ],
+                ["MATERIALES","$ {:,.2f}".format(materiales),"","","", "SUBTOTAL", "$ {:,.2f}".format(subtotal)],
+                ["MANO DE OBRA","$ {:,.2f}".format(mano_obra),"","","", "IVA", "$ {:,.2f}".format(iva)],
+                ["","","","","", "TOTAL", "$ {:,.2f}".format(total)]
             ]
+    cols_data_totals = Table(data_totals, colWidths=[100,30,100, 50, 100]) # Ajusta el tamaño de las columnas de espacio si es necesario
 
     table_totals = Table(data_totals)
 
@@ -150,7 +150,9 @@ def create_pdf(cotizaciones):
     totals_spacer = Spacer(-1, spacer_height) 
 
     flowables.append(totals_spacer) 
-    flowables.append(table_totals)
+    # flowables.append(table_totals)
+    flowables.append(cols_data_totals)
+
 
     doc.build(flowables) # Construir el documento
 
