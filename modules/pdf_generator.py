@@ -24,8 +24,8 @@ def create_pdf(cotizaciones):
     logo_path = "./static/img/logoEmpresa.png"
     logo = Image(logo_path, width=100, height=92)  # Ajusta width y height según las dimensiones deseadas
 
-    styles = getSampleStyleSheet()
-    header_style = styles['Heading1']
+    styles = getSampleStyleSheet() 
+    header_style = styles['Heading1'] # Estilo de encabezado
     header_style.alignment = 1 # Center
 
     # Define un estilo personalizado para el párrafo con un espacio entre líneas mínimo
@@ -63,7 +63,7 @@ def create_pdf(cotizaciones):
     mano_obra = cotizaciones[0]['mano_obra']
     subtotal = cotizaciones[0]['subtotal']
     iva = cotizaciones[0]['iva']
-    total = cotizaciones[0]['total']
+    total = cotizaciones[0]['total'] 
 
     
 
@@ -72,15 +72,15 @@ def create_pdf(cotizaciones):
          str(id_presupuesto)],
         ["Fecha:", fecha.strftime('%d-%m-%Y'), "", ""],
     ]
-    header_table = Table(data_header, colWidths=[100, 150, 200, 50])
+    header_table = Table(data_header, colWidths=[100, 150, 200, 50]) # Ajusta el tamaño de las columnas de espacio si es necesario
 
     header_table.setStyle(TableStyle([
         ('ALIGN', (0, 0), (-1, -1), 'LEFT'), # Alineación a la izquierda
         ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'), # Fuente negrita
-        ('FONTSIZE', (0, 0), (-1, -1), 10),
+        ('FONTSIZE', (0, 0), (-1, -1), 10), # Tamaño de fuente
     ]))
 
-    data = [["Part", "Descripcion", "Cant", "Precio", "Importe"]]
+    data = [["Part", "Descripcion", "Cant", "Precio", "Importe"]] # Encabezados de la tabla
 
     for cotizacion in cotizaciones:
         if 'partida' in cotizacion and cotizacion['partida'] is not None and 'descripcion' in cotizacion and cotizacion['descripcion'] is not None and cotizacion['descripcion'].strip() != "":
@@ -89,7 +89,7 @@ def create_pdf(cotizaciones):
             data.append([cotizacion['partida'], descripcion, cotizacion['cantidad'],
                         "$ {:,.2f}".format(cotizacion["precio"]), "$ {:,.2f}".format(cotizacion["importe"])])
 
-    table = Table(data, colWidths=[30, 380, 40, 60, 60])
+    table = Table(data, colWidths=[30, 380, 40, 60, 60]) # Ajusta el tamaño de las columnas de espacio si es necesario
 
     table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.gray),
@@ -108,8 +108,6 @@ def create_pdf(cotizaciones):
         ('GRID', (0, 0), (-1, -1), 1, colors.black),
     ]))
 
-    # data_totals = [["Materiales", "Mano de Obra", "Subtotal", "IVA", "Total"],
-    #                [materiales, mano_obra, subtotal, iva, total]]
     data_totals = [
                 ["Materiales", "Mano de Obra", "Subtotal", "IVA", "Total"],
                 [
@@ -136,12 +134,10 @@ def create_pdf(cotizaciones):
 
     spacer = Spacer(0, 20)
 
-    flowables = [
-        company_info_table,
-        spacer]
-    flowables.append(header_table)
-    flowables.append(spacer)
-    flowables.append(KeepTogether(table))
+    flowables = [company_info_table, spacer] # Agregar la tabla de información de la empresa
+    flowables.append(header_table) # Agregar la tabla de encabezado
+    flowables.append(spacer) # Agregar un espacio
+    flowables.append(KeepTogether(table)) # Agregar la tabla de cotizaciones
 
     # Calcular la altura de las tablas
     header_table_width, header_table_height = header_table.wrap(doc.width, doc.height)
@@ -150,19 +146,13 @@ def create_pdf(cotizaciones):
 
     # Calcular espacio disponible en la página actual
     remaining_space = doc.height - (header_table_height + spacer.height + table_height) - 75
-    # Verificar si hay espacio suficiente para la tabla de totales
-    # if remaining_space < table_totals_height + 20:
-    #     flowables.append(PageBreak())
-    #     remaining_space = doc.height
-
-    # Calcular la altura del spacer para mover la tabla de totales a la parte inferior de la página
     spacer_height = remaining_space - table_totals_height - 60 
     totals_spacer = Spacer(-1, spacer_height) 
 
-    flowables.append(totals_spacer)
+    flowables.append(totals_spacer) 
     flowables.append(table_totals)
 
-    doc.build(flowables)
+    doc.build(flowables) # Construir el documento
 
     with open("cotizacion.pdf", "rb") as f:
         pdf_data = f.read()
