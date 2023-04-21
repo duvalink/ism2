@@ -21,8 +21,8 @@ def create_pdf(cotizaciones):
                             bottomMargin=20 * mm,  # Margen inferior de 20 mm
                             )
     
-    logo_path = "./static/img/logo_bimbo.png"
-    logo = Image(logo_path, width=70, height=50)  # Ajusta width y height según las dimensiones deseadas
+    logo_path = "./static/img/logoEmpresa.png"
+    logo = Image(logo_path, width=100, height=92)  # Ajusta width y height según las dimensiones deseadas
 
     styles = getSampleStyleSheet()
     header_style = styles['Heading1']
@@ -80,7 +80,7 @@ def create_pdf(cotizaciones):
         ('FONTSIZE', (0, 0), (-1, -1), 10),
     ]))
 
-    data = [["Partida", "Descripcion", "Cantidad", "Precio", "Importe"]]
+    data = [["Part", "Descripcion", "Cant", "Precio", "Importe"]]
 
     for cotizacion in cotizaciones:
         if 'partida' in cotizacion and cotizacion['partida'] is not None and 'descripcion' in cotizacion and cotizacion['descripcion'] is not None and cotizacion['descripcion'].strip() != "":
@@ -89,7 +89,7 @@ def create_pdf(cotizaciones):
             data.append([cotizacion['partida'], descripcion, cotizacion['cantidad'],
                         "$ {:,.2f}".format(cotizacion["precio"]), "$ {:,.2f}".format(cotizacion["importe"])])
 
-    table = Table(data, colWidths=[50, 200, 100, 80, 60])
+    table = Table(data, colWidths=[30, 380, 40, 60, 60])
 
     table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.gray),
@@ -97,14 +97,14 @@ def create_pdf(cotizaciones):
         ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
         ('VALIGN', (0, 0), (-1, 0), 'MIDDLE'),
         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, 0), 13),
+        ('FONTSIZE', (0, 0), (-1, 0), 11),
         ('BOTTOMPADDING', (0, 0), (-1, 0), 10),
         ('BACKGROUND', (0, 1), (-1, -1), colors.white),
         ('TEXTCOLOR', (0, 1), (-1, -1), colors.red),
         ('ALIGN', (0, 1), (-1, -1), 'CENTER'),
         ('VALIGN', (0, 1), (-1, -1), 'MIDDLE'),
         ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
-        ('FONTSIZE', (0, 1), (-1, -1), 10),
+        ('FONTSIZE', (0, 1), (-1, -1), 9),
         ('GRID', (0, 0), (-1, -1), 1, colors.black),
     ]))
 
@@ -149,14 +149,14 @@ def create_pdf(cotizaciones):
     table_totals_width, table_totals_height = table_totals.wrap(doc.width, doc.height)
 
     # Calcular espacio disponible en la página actual
-    remaining_space = doc.height - (header_table_height + spacer.height + table_height) - 55
+    remaining_space = doc.height - (header_table_height + spacer.height + table_height) - 75
     # Verificar si hay espacio suficiente para la tabla de totales
     # if remaining_space < table_totals_height + 20:
     #     flowables.append(PageBreak())
     #     remaining_space = doc.height
 
     # Calcular la altura del spacer para mover la tabla de totales a la parte inferior de la página
-    spacer_height = remaining_space - table_totals_height - 50 
+    spacer_height = remaining_space - table_totals_height - 60 
     totals_spacer = Spacer(-1, spacer_height) 
 
     flowables.append(totals_spacer)
