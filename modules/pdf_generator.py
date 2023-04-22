@@ -68,8 +68,7 @@ def create_pdf(cotizaciones):
 
 
     data_header = [
-        ["Cliente:", nombre_cliente,"", "Presupuesto #:",
-        ],
+        ["Cliente:", nombre_cliente,"", "Presupuesto #:"],
         ["Fecha:", fecha.strftime('%d-%m-%Y'), "", str(id_presupuesto)],
         ["Direccion:", direccion_cliente, "", ""],
     ]
