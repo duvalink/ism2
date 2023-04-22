@@ -80,14 +80,6 @@
                 <td>$ {{ '%0.2f' % cotizaciones[0].total if cotizaciones else '0.00' }}</td>
             </tr>
         </tfoot>
-        <tr>
-            <td>Material: </td>
-            <td>$ {{ '%0.2f' % cotizaciones[0].materiales if cotizaciones else '0.00' }}</td>
-        </tr>
-        <tr>
-            <td>Mano de Obra: </td>
-            <td>$ {{ '%0.2f' % cotizaciones[0].mano_obra if cotizaciones else '0.00' }}</td>
-        </tr>
     </table>
 
     <div class="select_cliente">
@@ -175,9 +167,6 @@
                     // Si la cotización se guardó correctamente, descarga el PDF y recarga la página
                     var response = JSON.parse(xhr.responseText);
 
-                    // Habilitar el botón de refrescar la página
-                    document.getElementById("refresh-page").disabled = false;
-
                     // Descargar el PDF
                     var link = document.createElement("a");
                     link.href = "/cotizaciones/descargar_cotizacion/" + response.id_presupuesto;
@@ -185,13 +174,6 @@
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
-
-                    // Recargar la página con la tabla limpia
-                    setTimeout(function () {
-                        window.location.href = response.reload_url;
-                    }, 1000);
-                } else {
-                    alert("Error al guardar la cotización: " + xhr.responseText);
                 }
             }
         };
