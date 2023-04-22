@@ -8,7 +8,7 @@ from reportlab.lib.units import inch, mm
 def create_pdf(cotizaciones):
  # Datos de la empresa
     nombre_empresa = "INDUSTRIAL SHOP METALIC"
-    rfc_empresa = "ISM210913-PS5"
+    rfc_empresa = "RFC: ISM210913-PS5"
     direccion_empresa = "RIO ATOYAC #2477, GONZALEZ ORTEGA, MEXICALI BAJA CALIFORNIA"
     telefono_empresa = "TELS. (686) 562-6369, 561-24-36, CEL. (686) 223-21-70"
 
@@ -46,12 +46,13 @@ def create_pdf(cotizaciones):
         # Crea una tabla para organizar el logo y los datos de la empresa
     company_info_table = Table([
     [logo, '', [[nombre_empresa], [rfc_empresa], [direccion_empresa], [telefono_empresa]], '', logo]
-    ], colWidths=[90, 10, 350, 10, 90])  # Ajusta el tamaño de las columnas de espacio si es necesario
+    ], colWidths=[100, 5, 360, 5, 100])  # Ajusta el tamaño de las columnas de espacio si es necesario
 
     # Establece el estilo de la tabla
     company_info_table.setStyle(TableStyle([
     ('VALIGN', (0, 0), (-1, -1), 'TOP'),  # Alineación vertical en la parte superior
     ('VALIGN', (1, 0), (1, 0), 'TOP'),  # Alineación vertical en la parte superior de la tabla anidada
+    # ('GRID', (0, 0), (-1, -1), 1, colors.black) # Agrega bordes a la tabla
         ]))
 
 
@@ -87,9 +88,10 @@ def create_pdf(cotizaciones):
     for cotizacion in cotizaciones:
         if 'partida' in cotizacion and cotizacion['partida'] is not None and 'descripcion' in cotizacion and cotizacion['descripcion'] is not None and cotizacion['descripcion'].strip() != "":
             descripcion = Paragraph(
-                cotizacion['descripcion'], styles['Normal'])
-            data.append([cotizacion['partida'], descripcion, cotizacion['cantidad'],
-                        "$ {:,.2f}".format(cotizacion["precio"]), "$ {:,.2f}".format(cotizacion["importe"])])
+            cotizacion['descripcion'], styles['Normal'])
+            data.append([cotizacion['partida'], descripcion, # type: ignore
+            cotizacion['cantidad'], 
+            "$ {:,.2f}".format(cotizacion["precio"]), "$ {:,.2f}".format(cotizacion["importe"])])
 
     table = Table(data, colWidths=[30, 380, 40, 60, 60]) # Ajusta el tamaño de las columnas de espacio si es necesario
 
