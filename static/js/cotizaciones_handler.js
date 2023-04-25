@@ -11,6 +11,7 @@ $(document).ready(function () {
         // Envía el formulario principal en lugar del formulario oculto
         $('#cotizacion-form').submit();
 
+        console.log('Iniciando solicitud AJAX');
         $.ajax({
             url: guardarCotizacionUrl,
             method: "POST",
@@ -38,18 +39,21 @@ $(document).ready(function () {
 function cargarCotizaciones() {
     const cotizaciones = JSON.parse(localStorage.getItem('cotizaciones')); // Obtiene las cotizaciones del almacenamiento local
     if (cotizaciones) { // Si hay cotizaciones en el almacenamiento local, las agrega a la tabla
+        console.log('Obteniendo cotizaciones del almacenamiento local.');
         for (let cotizacion of cotizaciones) {
+            console.log('Agregando cotizacion a la tabla: ', cotizacion);
             agregarFila(cotizacion.descripcion, cotizacion.cantidad, cotizacion.precio, cotizacion.material, cotizacion.importe);
         }
     }
 }
-
 // Guarda las cotizaciones en el almacenamiento local
 function guardarCotizaciones(cotizaciones) {
+    console.log('Guardando cotizaciones');
     localStorage.setItem('cotizaciones', JSON.stringify(cotizaciones));
 }
 
 // Limpia las cotizaciones del almacenamiento local
 function limpiarCotizaciones() {
+    console.log('Limpiando cotizaciones');
     localStorage.removeItem('cotizaciones');
 }
