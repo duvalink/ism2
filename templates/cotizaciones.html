@@ -104,41 +104,6 @@
 
 
 </div>
-
-{% if clear_table %}
-<script>
-    window.onload = function () {
-        const table = document.getElementById('cotizaciones-table');
-        const rowCount = table.rows.length;
-
-        // Eliminar todas las filas excepto la primera (encabezado)
-        for (let i = rowCount - 1; i > 0; i--) {
-            table.deleteRow(i);
-        }
-    }
-</script>
-{% endif %}
-
-{% if 'cotizaciones' in session %}
-{% with cotizaciones=session['cotizaciones']|tojson %}
-<script>
-    var cotizaciones = {{ cotizaciones| safe }};
-</script>
-{% endwith %}
-{% else %}
-<script>
-    var cotizaciones = null;
-</script>
-{% endif %}
-{% if clear_table %}
-<script>
-    window.onload = function () {
-        // Limpiar la tabla aquí
-    }
-</script>
-{% endif %}
-
-
 <script src="{{ url_for('static', filename='js/operaciones_mat.js') }}"></script>
 <script src="{{ url_for('static', filename='js/mostrar_contactos.js') }}"></script>
 <!-- VARIABLE PARA QUE EN EL ARCHIVO JS RECONOZCA LA URL, YA QUE LOS ARCHIVO JS NO SOPORTAN JINJA2 -->
@@ -148,44 +113,44 @@
 <script src="{{ url_for('static', filename='js/cotizaciones_handler.js') }}"></script>
 
 <script>
-// Crear un nuevo objeto XMLHttpRequest
-// Este es el objeto que usaremos para enviar la solicitud
-// y recibir la respuesta
-var xhr = new XMLHttpRequest();
+    // Crear un nuevo objeto XMLHttpRequest
+    // Este es el objeto que usaremos para enviar la solicitud
+    // y recibir la respuesta
+    var xhr = new XMLHttpRequest();
 
-// Crear la función de devolución de llamada para ejecutar cada vez que se cambia el estado de la solicitud
-xhr.onreadystatechange = function () {
-    if (xhr.readyState === XMLHttpRequest.DONE) {
-        if (xhr.status === 200) {
-            // Si la cotización se guardó correctamente, descarga el PDF y recarga la página
-            var response = JSON.parse(xhr.responseText);
+    // Crear la función de devolución de llamada para ejecutar cada vez que se cambia el estado de la solicitud
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                // Si la cotización se guardó correctamente, descarga el PDF y recarga la página
+                var response = JSON.parse(xhr.responseText);
 
-            // Descargar el PDF
-            var link = document.createElement("a");
-            link.href = "/cotizaciones/descargar_cotizacion/" + response.id_presupuesto;
-            link.download = "cotizacion_" + response.id_presupuesto + ".pdf";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+                // Descargar el PDF
+                var link = document.createElement("a");
+                link.href = "/cotizaciones/descargar_cotizacion/" + response.id_presupuesto;
+                link.download = "cotizacion_" + response.id_presupuesto + ".pdf";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
         }
-    }
-};
+    };
 
-// Obtener el formulario
-var form = document.getElementById("cotizacion-form"); // Actualizar el ID del formulario aquí
+    // Obtener el formulario
+    var form = document.getElementById("cotizacion-form"); // Actualizar el ID del formulario aquí
 
-// Crear un objeto FormData usando el formulario
-// Este objeto nos permite enviar los datos del formulario junto con la solicitud
-var formData = new FormData(form);
+    // Crear un objeto FormData usando el formulario
+    // Este objeto nos permite enviar los datos del formulario junto con la solicitud
+    var formData = new FormData(form);
 
-// Asegúrate de que el cliente_id se incluya en los datos enviados
-formData.append("cliente_id", clientId);
+    // Asegúrate de que el cliente_id se incluya en los datos enviados
+    formData.append("cliente_id", clientId);
 
-// Enviar una solicitud POST a la ruta de cotización
-xhr.open("POST", "/cotizaciones/cotizar");
+    // Enviar una solicitud POST a la ruta de cotización
+    xhr.open("POST", "/cotizaciones/cotizar");
 
-// Enviar la solicitud con los datos del formulario
-xhr.send(formData);
+    // Enviar la solicitud con los datos del formulario
+    xhr.send(formData);
 </script>
 
 {% endblock %}
