@@ -72,6 +72,7 @@ def create_pdf(cotizaciones):
         ["Cliente:", nombre_cliente,"", "Presupuesto #:"],
         ["Fecha:", fecha.strftime('%d-%m-%Y'), "", str(id_presupuesto)],
         ["Direccion:", direccion_cliente, "", ""],
+        ["Atencion:", "", "", ""],
     ]
     header_table = Table(data_header, colWidths=[60, 280,130, 100]) # Ajusta el tamaño de las columnas de espacio si es necesario
 
