@@ -99,6 +99,7 @@ def obtener_contactos(id_cliente):
         "SELECT * FROM clientes_contactos WHERE cliente_id = %s", (id_cliente,))  # Se ejecuta la consulta
     contactos = cursor.fetchall()  # Se obtienen los resultados de la consulta
 
+
     # Se devuelve la lista de contactos como un objeto JSON
     return jsonify(contactos)
 
@@ -172,10 +173,12 @@ def obtener_cotizaciones_por_id(id_presupuesto):
 
     query = """
     SELECT c.id_cliente, c.nombre, c.direccion, p.id_presupuesto, p.fecha, p.materiales, p.mano_obra, p.subtotal, p.iva, p.total,
-           pp.id_partida, pp.partida, pp.descripcion, pp.cantidad, pp.precio, pp.importe
+           pp.id_partida, pp.partida, pp.descripcion, pp.cantidad, pp.precio, pp.importe,
+           cc.id_contacto, cc.contacto, cc.correo
     FROM presupuestos p
     JOIN clientes c ON p.cliente_id = c.id_cliente
     JOIN presupuestos_partidas pp ON p.id_presupuesto = pp.presupuesto_id
+    JOIN clientes_contactos cc ON c.id_cliente = cc.cliente_id
     WHERE p.id_presupuesto = %s
     ORDER BY p.id_presupuesto, pp.partida
     """
@@ -200,8 +203,24 @@ def obtener_cotizaciones_por_id(id_presupuesto):
             'descripcion': cotizacion[12],
             'cantidad': cotizacion[13],
             'precio': cotizacion[14],
-            'importe': cotizacion[15]
+            'importe': cotizacion[15],
+            'contactos': []
         }
         cotizaciones.append(cotizacion_dict)
+
+
+        # Obtener los contactos del cliente
+        cursor.execute("SELECT id_contacto, contacto, correo FROM clientes_contactos WHERE cliente_id = %s", (cotizacion[0],))
+        contactos_raw = cursor.fetchall()
+
+        # Agregar los contactos a la lista de cotizaciones
+    for contacto in contactos_raw:
+        contacto_dict = {
+            # 'id_contacto': contacto[0],
+            'contacto': contacto[0],
+            # 'correo': contacto[2]
+        }
+        # print(contacto_dict)
+        cotizacion_dict['contactos'].append(contacto_dict)
 
     return cotizaciones
